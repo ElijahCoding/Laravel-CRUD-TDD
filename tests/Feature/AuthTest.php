@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\User;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class AuthTest extends TestCase
@@ -34,5 +33,12 @@ class AuthTest extends TestCase
         $response = $this->actingAs($user)->get('/products/');
 
         $response->assertStatus(200);
+    }
+
+    public function test_unauthenticated_user_cannot_access_products_table()
+    {
+        $response = $this->get('/products');
+        $response->assertStatus(302);
+        $response->assertRedirect('/login');
     }
 }
